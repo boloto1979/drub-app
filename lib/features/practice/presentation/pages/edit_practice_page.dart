@@ -34,6 +34,44 @@ class _EditPracticePageState extends State<EditPracticePage> {
 
   String? _imagePath;
   bool _saving = false;
+  DateTime? _completionDate;
+  bool _updatingInternally = false;
+
+  int get _remaining {
+    final target = int.tryParse(_targetCtrl.text) ?? widget.goal.targetCount;
+    return (target - widget.goal.currentCount).clamp(0, target);
+  }
+
+  void _onFieldsChanged() {
+    if (_updatingInternally) return;
+    final daily = int.tryParse(_dailyCtrl.text);
+    final remaining = _remaining;
+    DateTime? newDate;
+    if (daily != null && daily > 0 && remaining > 0) {
+      newDate = DateTime.now().add(Duration(days: (remaining / daily).ceil()));
+    }
+    if (mounted) setState(() => _completionDate = newDate);
+  }
+
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final initial = _completionDate ?? now.add(const Duration(days: 30));
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: now.add(const Duration(days: 1)),
+      lastDate: now.add(const Duration(days: 365 * 10)),
+    );
+    if (picked == null || !mounted) return;
+    final days = picked.difference(now).inDays;
+    if (days > 0 && _remaining > 0) {
+      final daily = (_remaining / days).ceil();
+      _updatingInternally = true;
+      _dailyCtrl.text = daily.toString();
+      _updatingInternally = false;
+    }
+    setState(() => _completionDate = picked);
+  }
 
   @override
   void initState() {
@@ -46,10 +84,15 @@ class _EditPracticePageState extends State<EditPracticePage> {
     _malaCtrl =
         TextEditingController(text: widget.goal.malaSize.toString());
     _imagePath = widget.goal.imagePath;
+    _completionDate = widget.goal.estimatedCompletionDate;
+    _dailyCtrl.addListener(_onFieldsChanged);
+    _targetCtrl.addListener(_onFieldsChanged);
   }
 
   @override
   void dispose() {
+    _dailyCtrl.removeListener(_onFieldsChanged);
+    _targetCtrl.removeListener(_onFieldsChanged);
     _nameCtrl.dispose();
     _targetCtrl.dispose();
     _dailyCtrl.dispose();
@@ -109,6 +152,39 @@ class _EditPracticePageState extends State<EditPracticePage> {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 20),
+            _label(s.scheduledCompletion),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: _pickDate,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppColors.lightDivider),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _completionDate != null
+                            ? '${_completionDate!.day.toString().padLeft(2, '0')}/'
+                              '${_completionDate!.month.toString().padLeft(2, '0')}/'
+                              '${_completionDate!.year}'
+                            : '—',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.calendar_today_outlined,
+                      size: 16,
+                      color: AppColors.goldDim,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
             _label(s.malaSize),
             const SizedBox(height: 8),
             _MalaSizeField(controller: _malaCtrl),
@@ -117,13 +193,20 @@ class _EditPracticePageState extends State<EditPracticePage> {
               onPressed: _saving ? null : _submit,
               child: Text(_saving ? s.saving : s.save),
             ),
-            const SizedBox(height: 16),
-            TextButton(
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
               onPressed: () => _confirmDelete(context),
-              child: Text(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.maroon,
+                side: const BorderSide(color: AppColors.maroon, width: 1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              icon: const Icon(Icons.delete_outline, size: 16),
+              label: Text(
                 s.delete,
                 style: GoogleFonts.raleway(
-                  color: AppColors.maroon,
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 2,

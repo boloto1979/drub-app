@@ -11,6 +11,9 @@ class PracticeRepository {
   Stream<List<PracticeGoal>> watchAll() =>
       _isar.practiceGoals.where().watch(fireImmediately: true);
 
+  Stream<PracticeGoal?> watchGoal(int id) =>
+      _isar.practiceGoals.watchObject(id, fireImmediately: true);
+
   Future<List<PracticeGoal>> getAll() =>
       _isar.practiceGoals.where().findAll();
 

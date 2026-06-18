@@ -44,4 +44,10 @@ class OnboardingNotifier extends _$OnboardingNotifier {
     await prefs.setBool(_kOnboardingDoneKey, true);
     state = true;
   }
+
+  Future<void> reset() async {
+    final prefs = await ref.read(sharedPreferencesProvider.future);
+    await prefs.setBool(_kOnboardingDoneKey, false);
+    state = false;
+  }
 }

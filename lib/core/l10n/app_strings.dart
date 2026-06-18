@@ -13,6 +13,8 @@ class S {
     return S._(locale);
   }
 
+  static S forLocale(Locale locale) => S._(locale);
+
   bool get _isPt => locale.languageCode == 'pt';
 
   // --- App ---
@@ -27,6 +29,8 @@ class S {
   // --- Language selection ---
   String get chooseLanguage => _isPt ? 'ESCOLHA O IDIOMA' : 'CHOOSE LANGUAGE';
   String get continueBtn => _isPt ? 'CONTINUAR' : 'CONTINUE';
+  String get practiceAccumulation => _isPt ? 'ACUMULAÇÃO DE PRÁTICA' : 'PRACTICE ACCUMULATION';
+  String get language => _isPt ? 'IDIOMA' : 'LANGUAGE';
 
   // --- Practice list ---
   String get accumulations => _isPt ? 'ACUMULAÇÕES' : 'ACCUMULATIONS';
@@ -74,6 +78,7 @@ class S {
   String get scheduledCompletion => _isPt ? 'Data prevista de conclusão' : 'Scheduled completion date';
   String get schedule => _isPt ? 'AGENDA' : 'SCHEDULE';
   String get edit => _isPt ? 'EDITAR' : 'EDIT';
+  String get addMala => _isPt ? 'ADICIONAR MALA' : 'ADD MALA';
 }
 
 final sProvider = Provider<S>((ref) {

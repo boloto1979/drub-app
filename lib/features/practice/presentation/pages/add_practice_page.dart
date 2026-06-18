@@ -28,9 +28,53 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
 
   String? _imagePath;
   bool _saving = false;
+  DateTime? _completionDate;
+  bool _updatingInternally = false;
+
+  int get _remaining => int.tryParse(_targetCtrl.text) ?? 0;
+
+  void _onFieldsChanged() {
+    if (_updatingInternally) return;
+    final daily = int.tryParse(_dailyCtrl.text);
+    final remaining = _remaining;
+    DateTime? newDate;
+    if (daily != null && daily > 0 && remaining > 0) {
+      newDate = DateTime.now().add(Duration(days: (remaining / daily).ceil()));
+    }
+    if (mounted) setState(() => _completionDate = newDate);
+  }
+
+  Future<void> _pickDate() async {
+    final now = DateTime.now();
+    final initial = _completionDate ?? now.add(const Duration(days: 30));
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: now.add(const Duration(days: 1)),
+      lastDate: now.add(const Duration(days: 365 * 10)),
+    );
+    if (picked == null || !mounted) return;
+    final days = picked.difference(now).inDays;
+    if (days > 0 && _remaining > 0) {
+      final daily = (_remaining / days).ceil();
+      _updatingInternally = true;
+      _dailyCtrl.text = daily.toString();
+      _updatingInternally = false;
+    }
+    setState(() => _completionDate = picked);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _dailyCtrl.addListener(_onFieldsChanged);
+    _targetCtrl.addListener(_onFieldsChanged);
+  }
 
   @override
   void dispose() {
+    _dailyCtrl.removeListener(_onFieldsChanged);
+    _targetCtrl.removeListener(_onFieldsChanged);
     _nameCtrl.dispose();
     _targetCtrl.dispose();
     _dailyCtrl.dispose();
@@ -88,6 +132,39 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
               controller: _dailyCtrl,
               hint: '1000',
               keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+            _label(s.scheduledCompletion),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: _pickDate,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppColors.lightDivider),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _completionDate != null
+                            ? '${_completionDate!.day.toString().padLeft(2, '0')}/'
+                              '${_completionDate!.month.toString().padLeft(2, '0')}/'
+                              '${_completionDate!.year}'
+                            : '—',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.calendar_today_outlined,
+                      size: 16,
+                      color: AppColors.goldDim,
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             _label(s.malaSize),

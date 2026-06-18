@@ -12,7 +12,7 @@ class MantraBanner extends StatefulWidget {
     super.key,
     this.height = 48,
     this.color,
-    this.spacing = 7,
+    this.spacing = 10,
   });
 
   @override
@@ -70,18 +70,19 @@ class _MantraPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final scale = size.height / image.height;
     final scaledWidth = image.width * scale;
+    final step = scaledWidth + spacing;
 
     final paint = Paint()
       ..colorFilter = ColorFilter.mode(color, BlendMode.srcIn);
 
-    double x = 0;
+    final src = Rect.fromLTWH(
+      0, 0, image.width.toDouble(), image.height.toDouble(),
+    );
+
+    double x = -(step / 2);
     while (x < size.width) {
-      final src = Rect.fromLTWH(
-        0, 0, image.width.toDouble(), image.height.toDouble(),
-      );
-      final dst = Rect.fromLTWH(x, 0, scaledWidth, size.height);
-      canvas.drawImageRect(image, src, dst, paint);
-      x += scaledWidth + spacing;
+      canvas.drawImageRect(image, src, Rect.fromLTWH(x, 0, scaledWidth, size.height), paint);
+      x += step;
     }
   }
 

@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/providers/locale_provider.dart';
-import '../../../../shared/widgets/mantra_banner.dart';
 
 class LanguageSelectionPage extends ConsumerStatefulWidget {
   const LanguageSelectionPage({super.key});
@@ -18,10 +18,11 @@ class LanguageSelectionPage extends ConsumerStatefulWidget {
 
 class _LanguageSelectionPageState
     extends ConsumerState<LanguageSelectionPage> {
-  Locale _selected = const Locale('en');
+  Locale _selected = const Locale('pt');
 
   @override
   Widget build(BuildContext context) {
+    final s = S.forLocale(_selected);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textColor =
         isDark ? AppColors.textPrimary : AppColors.lightTextPrimary;
@@ -31,65 +32,108 @@ class _LanguageSelectionPageState
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Spacer(flex: 2),
-              const MantraBanner(height: 44),
-              const SizedBox(height: 32),
+              const Spacer(flex: 3),
+              Text(
+                'སྒྲུབ',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.goldDim,
+                  fontSize: 72,
+                  height: 1,
+                ),
+              ),
+              const SizedBox(height: 12),
               Text(
                 'Drub',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.cormorantGaramond(
                   color: textColor,
-                  fontSize: 40,
+                  fontSize: 36,
                   fontWeight: FontWeight.w300,
-                  letterSpacing: 6,
+                  letterSpacing: 10,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: AppColors.goldDim.withValues(alpha: 0.4),
+                      thickness: 0.5,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      '·',
+                      style: TextStyle(
+                        color: AppColors.goldDim.withValues(alpha: 0.6),
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: AppColors.goldDim.withValues(alpha: 0.4),
+                      thickness: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
               Text(
-                'PRACTICE · LIBRARY · CALENDAR',
+                s.practiceAccumulation,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.raleway(
-                  color: AppColors.gold,
+                  color: AppColors.goldDim,
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 3,
                 ),
               ),
-              const Spacer(flex: 2),
+              const Spacer(flex: 3),
               Text(
-                'CHOOSE LANGUAGE',
+                s.language,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.raleway(
                   color: mutedColor,
-                  fontSize: 10,
+                  fontSize: 9,
                   fontWeight: FontWeight.w600,
-                  letterSpacing: 2.5,
+                  letterSpacing: 3,
                 ),
               ),
-              const SizedBox(height: 20),
-              _LanguageOption(
-                label: 'English',
-                locale: const Locale('en'),
-                selected: _selected,
-                onTap: (l) => setState(() => _selected = l),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _LanguageOption(
+                      label: 'English',
+                      locale: const Locale('en'),
+                      selected: _selected,
+                      onTap: (l) => setState(() => _selected = l),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _LanguageOption(
+                      label: 'Português',
+                      locale: const Locale('pt'),
+                      selected: _selected,
+                      onTap: (l) => setState(() => _selected = l),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 12),
-              _LanguageOption(
-                label: 'Português',
-                locale: const Locale('pt'),
-                selected: _selected,
-                onTap: (l) => setState(() => _selected = l),
-              ),
-              const Spacer(flex: 3),
+              const SizedBox(height: 24),
               FilledButton(
                 onPressed: _confirm,
-                child: const Text('CONTINUE'),
+                child: Text(s.continueBtn),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 48),
             ],
           ),
         ),
