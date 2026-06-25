@@ -1,3 +1,4 @@
+// All quotes verified from lotsawahouse.org translations.
 class LamaQuote {
   final String text;
   final String author;
@@ -5,104 +6,89 @@ class LamaQuote {
 }
 
 const List<LamaQuote> lamaQuotes = [
+  // ── Dudjom Rinpoche ─ "Calling the Guru from Afar" (lotsawahouse.org) ────────
   LamaQuote(
     text:
-        "Whatever arises in the mind, do not follow after it. Leave it as it is, naturally, in its own state.",
+        "Since this present awareness is the actual buddha, I find the guru of openness and contentment within my heart.",
     author: "Dudjom Rinpoche",
   ),
   LamaQuote(
     text:
-        "The nature of mind has never been stained. Like the sky, it is primordially pure. Rest in that recognition.",
+        "By relaxing in uncontrived awareness, the free and open natural state, I obtain the blessing of the aimless self-liberation of whatever arises.",
     author: "Dudjom Rinpoche",
   ),
   LamaQuote(
-    text:
-        "Do not be distracted. That is the entire teaching. Distraction is samsara; non-distraction is liberation.",
+    text: "Guru of unrepayable kindness, I only remember you!",
     author: "Dudjom Rinpoche",
   ),
+
+  // ── Dilgo Khyentse Rinpoche ─ "Heart Advice in Four Lines" (lotsawahouse.org)
   LamaQuote(
-    text:
-        "Keep your practice simple and free from elaboration. The natural state is always already here.",
-    author: "Dudjom Rinpoche",
+    text: "Do not forget the guru; pray to him at all times.",
+    author: "Dilgo Khyentse Rinpoche",
   ),
   LamaQuote(
-    text:
-        "The purpose of practice is not to gain something new, but to recognize what has always been present.",
-    author: "Dudjom Rinpoche",
+    text: "Do not let your mind be distracted; look into its very essence.",
+    author: "Dilgo Khyentse Rinpoche",
   ),
   LamaQuote(
-    text:
-        "Everything that appears is the display of your own mind. To recognize this is liberation.",
+    text: "Do not forget death; let it spur you on to Dharma.",
     author: "Dilgo Khyentse Rinpoche",
   ),
   LamaQuote(
     text:
-        "The whole aim of practice is to tame the mind. A tamed mind is the source of all happiness.",
+        "Do not forget sentient beings; with compassion dedicate your merit to them and make prayers of aspiration.",
+    author: "Dilgo Khyentse Rinpoche",
+  ),
+
+  // ── Dilgo Khyentse Rinpoche ─ "Advice to Three-Year Retreatants" (lotsawahouse.org)
+  LamaQuote(
+    text:
+        "If it is motivated by the wish to benefit all beings, then even a single prostration or a single recitation of the hundred-syllable mantra will yield inexhaustible merit.",
     author: "Dilgo Khyentse Rinpoche",
   ),
   LamaQuote(
     text:
-        "Whatever thoughts arise, recognize their nature. They are empty, like clouds in the sky — they dissolve on their own.",
+        "It is more important to take to heart the key instructions than to receive a great many teachings.",
     author: "Dilgo Khyentse Rinpoche",
   ),
   LamaQuote(
-    text:
-        "Devotion is the swift path. With devotion, blessings enter the mind naturally, without effort.",
+    text: "Never think that the Dharma you are practising is for your benefit alone.",
     author: "Dilgo Khyentse Rinpoche",
   ),
+
+  // ── Dilgo Khyentse Rinpoche ─ "Advice to Jamyang Gyaltsen" (lotsawahouse.org)
   LamaQuote(
     text:
-        "Do not be discouraged by the smallness of your daily practice. Each drop fills the ocean.",
+        "It is enough simply to know that your own mind is inseparable from the guru, and to have continuous yearning and vivid devotion.",
     author: "Dilgo Khyentse Rinpoche",
   ),
+
+  // ── Patrul Rinpoche ─ "Preliminary Points" (lotsawahouse.org) ────────────────
   LamaQuote(
     text:
-        "Your own mind, primordially empty and luminous — that is the buddha. Do not seek it elsewhere.",
+        "Not paying attention is to be like a container turned upside down. Not remembering is to be like a container with a hole in it. Mixing what you hear with mental afflictions is to be like a container with poison inside.",
     author: "Patrul Rinpoche",
   ),
+
+  // ── Nyoshul Khen Rinpoche ─ "Natural Great Peace" (lotsawahouse.org) ─────────
   LamaQuote(
     text:
-        "Examine your own mind. There is no greater practice than this. There is no greater teacher than your own awareness.",
-    author: "Patrul Rinpoche",
+        "Rest in natural great peace, this exhausted mind, beaten helpless by karma and neurotic thought, like the relentless fury of pounding waves in the infinite ocean of saṃsāra.",
+    author: "Nyoshul Khen Rinpoche",
   ),
+
+  // ── Nyoshul Khen Rinpoche ─ "Mindfulness: The Mirror of the Mind" (lotsawahouse.org)
   LamaQuote(
-    text:
-        "All suffering arises from seeking happiness for oneself alone. All happiness arises from seeking it for others.",
-    author: "Patrul Rinpoche",
-  ),
-  LamaQuote(
-    text:
-        "The Dharma is not something outside. It is the nature of your own mind. Look inward.",
-    author: "Patrul Rinpoche",
-  ),
-  LamaQuote(
-    text:
-        "Practice is accumulating merit and wisdom — not as a burden, but as a natural expression of devotion.",
-    author: "Jigme Khyentse Rinpoche",
-  ),
-  LamaQuote(
-    text:
-        "Each recitation is a seed. Trust in the blessing of the lineage. The fruit will come in its own time.",
-    author: "Jigme Khyentse Rinpoche",
-  ),
-  LamaQuote(
-    text:
-        "Do not judge your practice by its quantity. One mantra recited with full presence outweighs a thousand recited in distraction.",
-    author: "Jigme Khyentse Rinpoche",
-  ),
-  LamaQuote(
-    text:
-        "Rest in natural great peace, this exhausted mind beaten helpless by karma and neurotic thoughts — like waves in the infinite ocean of samsara.",
+    text: "Mindfulness is the root of the Dharma.",
     author: "Nyoshul Khen Rinpoche",
   ),
   LamaQuote(
-    text:
-        "The nature of mind is open, clear, and unobstructed. It has never been anything other than this. Rest there.",
+    text: "Mindfulness is the path's main practice.",
     author: "Nyoshul Khen Rinpoche",
   ),
   LamaQuote(
-    text:
-        "Guru Rinpoche's blessing is always here, inseparable from your own mind. Call out to him with devotion and recognize this.",
+    text: "Undistractedly, look into the essence of mind.",
     author: "Nyoshul Khen Rinpoche",
   ),
 ];
