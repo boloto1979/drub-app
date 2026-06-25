@@ -10,7 +10,7 @@ import '../../data/models/practice_goal.dart';
 import '../../data/repositories/practice_repository.dart';
 import '../pages/practice_detail_page.dart';
 
-class PracticeGoalCard extends StatelessWidget {
+class PracticeGoalCard extends StatefulWidget {
   final PracticeGoal goal;
   final PracticeRepository repository;
 
@@ -21,238 +21,254 @@ class PracticeGoalCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
+  State<PracticeGoalCard> createState() => _PracticeGoalCardState();
+}
 
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PracticeDetailPage(
-            goal: goal,
-            repository: repository,
+class _PracticeGoalCardState extends State<PracticeGoalCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.maroon.withValues(alpha: 0.12),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
           ),
-        ),
+        ],
       ),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.lightDivider),
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _Header(goal: goal),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: _ProgressBar(goal: goal),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => PracticeDetailPage(
+                goal: widget.goal,
+                repository: widget.repository,
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-              child: _Stats(goal: goal, text: text),
+          ),
+          child: ColoredBox(
+            color: AppColors.lightBackground,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _ImageHeader(goal: widget.goal),
+                _ProgressSection(goal: widget.goal),
+                _MetaRow(goal: widget.goal),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _Header extends StatelessWidget {
+// ─── Image / Maroon header ────────────────────────────────────────────────────
+
+class _ImageHeader extends StatelessWidget {
   final PracticeGoal goal;
-  const _Header({required this.goal});
+  const _ImageHeader({required this.goal});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        _PracticeImage(imagePath: goal.imagePath),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final hasImage = goal.imagePath != null;
+    final height = hasImage ? 120.0 : 90.0;
+
+    return SizedBox(
+      height: height,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background
+          if (hasImage)
+            Image.file(File(goal.imagePath!), fit: BoxFit.cover)
+          else
+            Image.asset(
+              'assets/images/gura-placeholder.png',
+              fit: BoxFit.cover,
+            ),
+
+          // Gradient overlay — heavier at bottom so text reads clearly
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: hasImage ? 0.08 : 0.0),
+                  Colors.black.withValues(alpha: 0.62),
+                ],
+              ),
+            ),
+          ),
+
+          // Practice name — bottom left
+          Positioned(
+            bottom: 12,
+            left: 14,
+            right: 60,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  goal.practiceName,
+                  style: GoogleFonts.cormorantGaramond(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.4,
+                    height: 1.1,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  'Mala · ${goal.malaSize}',
+                  style: GoogleFonts.raleway(
+                    color: Colors.white.withValues(alpha: 0.55),
+                    fontSize: 9,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Progress bar ─────────────────────────────────────────────────────────────
+
+class _ProgressSection extends StatelessWidget {
+  final PracticeGoal goal;
+  const _ProgressSection({required this.goal});
+
+  @override
+  Widget build(BuildContext context) {
+    final fmt = NumberFormat.decimalPattern();
+    final pct = (goal.progressPercent * 100).round();
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                goal.practiceName,
-                style: Theme.of(context).textTheme.titleLarge,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                fmt.format(goal.currentCount),
+                style: GoogleFonts.cormorantGaramond(
+                  color: AppColors.lightTextPrimary,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w500,
+                  height: 1,
+                ),
               ),
-              const SizedBox(height: 2),
+              const Spacer(),
               Text(
-                'Mala: ${goal.malaSize}',
+                '$pct%',
+                style: GoogleFonts.raleway(
+                  color: AppColors.maroon.withValues(alpha: 0.6),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                fmt.format(goal.targetCount),
                 style: GoogleFonts.raleway(
                   color: AppColors.lightTextMuted,
-                  fontSize: 10,
-                  letterSpacing: 1.5,
+                  fontSize: 11,
+                  letterSpacing: 0.5,
                 ),
               ),
             ],
           ),
-        ),
-        if (goal.completedAt != null)
-          const Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(
-              Icons.check_circle_outline,
-              color: AppColors.goldDim,
-              size: 20,
-            ),
+          const SizedBox(height: 10),
+          LinearProgressIndicator(
+            value: goal.progressPercent,
+            backgroundColor: AppColors.lightSurfaceVariant,
+            valueColor: const AlwaysStoppedAnimation(AppColors.maroon),
+            minHeight: 3,
+            borderRadius: BorderRadius.circular(2),
           ),
-      ],
-    );
-  }
-}
-
-class _PracticeImage extends StatelessWidget {
-  final String? imagePath;
-  const _PracticeImage({required this.imagePath});
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(4),
-        bottomLeft: Radius.circular(4),
+        ],
       ),
-      child: imagePath != null
-          ? Image.file(
-              File(imagePath!),
-              width: 64,
-              height: 72,
-              fit: BoxFit.cover,
-            )
-          : Container(
-              width: 64,
-              height: 72,
-              color: AppColors.lightSurfaceVariant,
-              child: const Icon(
-                Icons.self_improvement_outlined,
-                color: AppColors.lightTextMuted,
-                size: 28,
-              ),
-            ),
     );
   }
 }
 
-class _ProgressBar extends StatelessWidget {
+// ─── Today + remaining ────────────────────────────────────────────────────────
+
+class _MetaRow extends StatelessWidget {
   final PracticeGoal goal;
-  const _ProgressBar({required this.goal});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              _fmt(goal.currentCount),
-              style: GoogleFonts.raleway(
-                color: AppColors.goldDim,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1,
-              ),
-            ),
-            Text(
-              _fmt(goal.targetCount),
-              style: GoogleFonts.raleway(
-                color: AppColors.lightTextMuted,
-                fontSize: 11,
-                letterSpacing: 1,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 6),
-        LinearProgressIndicator(
-          value: goal.progressPercent,
-          backgroundColor: AppColors.lightSurfaceVariant,
-          valueColor: const AlwaysStoppedAnimation(AppColors.goldDim),
-          minHeight: 2,
-          borderRadius: BorderRadius.circular(1),
-        ),
-      ],
-    );
-  }
-
-  String _fmt(int n) => NumberFormat.decimalPattern().format(n);
-}
-
-class _Stats extends StatelessWidget {
-  final PracticeGoal goal;
-  final TextTheme text;
-  const _Stats({required this.goal, required this.text});
+  const _MetaRow({required this.goal});
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final fmt = DateFormat('dd/MM/yyyy');
+    final fmt = NumberFormat.decimalPattern();
 
-    return Wrap(
-      spacing: 20,
-      runSpacing: 6,
-      children: [
-        if (goal.lastAccumulatedAt != null)
-          _Stat(
-            label: s.lastPractice,
-            value: fmt.format(goal.lastAccumulatedAt!),
-          ),
-        if (goal.dailyGoal != null && goal.dailyGoal! > 0) ...[
-          _Stat(
-            label: s.daily,
-            value: _fmt(goal.dailyGoal!),
-          ),
-          if (goal.estimatedCompletionDate != null)
-            _Stat(
-              label: s.estCompletion,
-              value: fmt.format(goal.estimatedCompletionDate!),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 14),
+      child: Row(
+        children: [
+          _Label(s.accumulated),
+          const SizedBox(width: 4),
+          Text(
+            fmt.format(goal.currentCount),
+            style: GoogleFonts.raleway(
+              color: AppColors.lightTextSecondary,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
             ),
-          if (goal.remaining > 0)
-            _Stat(
-              label: s.remaining,
-              value: _fmt(goal.remaining),
+          ),
+          if (goal.remaining > 0) ...[
+            const SizedBox(width: 20),
+            _Label(s.remaining),
+            const SizedBox(width: 4),
+            Text(
+              fmt.format(goal.remaining),
+              style: GoogleFonts.raleway(
+                color: AppColors.lightTextSecondary,
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
             ),
+          ],
         ],
-      ],
+      ),
     );
   }
-
-  String _fmt(int n) => NumberFormat.decimalPattern().format(n);
 }
 
-class _Stat extends StatelessWidget {
-  final String label;
-  final String value;
-  const _Stat({required this.label, required this.value});
+class _Label extends StatelessWidget {
+  final String text;
+  const _Label(this.text);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.raleway(
-            color: AppColors.lightTextMuted,
-            fontSize: 9,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.5,
-          ),
-        ),
-        Text(
-          value,
-          style: GoogleFonts.raleway(
-            color: AppColors.lightTextSecondary,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
+    return Text(
+      text,
+      style: GoogleFonts.raleway(
+        color: AppColors.lightTextMuted,
+        fontSize: 9,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 1.5,
+      ),
     );
   }
 }
+

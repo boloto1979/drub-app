@@ -105,10 +105,22 @@ class _EditPracticePageState extends State<EditPracticePage> {
     final s = S.of(context);
 
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
-        title: Text(s.editPractice),
+        backgroundColor: AppColors.maroon,
+        foregroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        title: Text(
+          s.editPractice,
+          style: GoogleFonts.cormorantGaramond(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.close, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -190,8 +202,20 @@ class _EditPracticePageState extends State<EditPracticePage> {
             _MalaSizeField(controller: _malaCtrl),
             const SizedBox(height: 48),
             FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.maroon,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
               onPressed: _saving ? null : _submit,
-              child: Text(_saving ? s.saving : s.save),
+              child: Text(
+                _saving ? s.saving : s.save,
+                style: GoogleFonts.raleway(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 2,
+                  fontSize: 11,
+                ),
+              ),
             ),
             const SizedBox(height: 12),
             OutlinedButton.icon(

@@ -63,6 +63,7 @@ class S {
   String get lastPractice => _isPt ? 'ÚLTIMA PRÁTICA' : 'LAST PRACTICE';
   String get daily => _isPt ? 'META DIÁRIA' : 'DAILY GOAL';
   String get estCompletion => _isPt ? 'PREVISÃO DE TÉRMINO' : 'EST. COMPLETION';
+  String get accumulated => _isPt ? 'FEITO' : 'DONE';
   String get remaining => _isPt ? 'RESTANTE' : 'REMAINING';
   String get completed => _isPt ? 'CONCLUÍDO' : 'COMPLETED';
   String get started => _isPt ? 'INICIADO EM' : 'STARTED ON';

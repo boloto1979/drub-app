@@ -23,13 +23,9 @@ class _LanguageSelectionPageState
   @override
   Widget build(BuildContext context) {
     final s = S.forLocale(_selected);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor =
-        isDark ? AppColors.textPrimary : AppColors.lightTextPrimary;
-    final mutedColor =
-        isDark ? AppColors.textSecondary : AppColors.lightTextSecondary;
 
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -37,6 +33,8 @@ class _LanguageSelectionPageState
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(flex: 3),
+
+              // ── Tibetan script ──────────────────────────────────────────
               Text(
                 'སྒྲུབ',
                 textAlign: TextAlign.center,
@@ -46,18 +44,22 @@ class _LanguageSelectionPageState
                   height: 1,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
+
+              // ── App name ────────────────────────────────────────────────
               Text(
                 'Drub',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.cormorantGaramond(
-                  color: textColor,
+                  color: AppColors.lightTextPrimary,
                   fontSize: 36,
                   fontWeight: FontWeight.w300,
-                  letterSpacing: 10,
+                  letterSpacing: 12,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
+
+              // ── Divider ─────────────────────────────────────────────────
               Row(
                 children: [
                   Expanded(
@@ -67,7 +69,7 @@ class _LanguageSelectionPageState
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
                     child: Text(
                       '·',
                       style: TextStyle(
@@ -84,7 +86,9 @@ class _LanguageSelectionPageState
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
+
+              // ── Subtitle ────────────────────────────────────────────────
               Text(
                 s.practiceAccumulation,
                 textAlign: TextAlign.center,
@@ -92,21 +96,26 @@ class _LanguageSelectionPageState
                   color: AppColors.goldDim,
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
-                  letterSpacing: 3,
+                  letterSpacing: 3.5,
                 ),
               ),
+
               const Spacer(flex: 3),
+
+              // ── Language label ──────────────────────────────────────────
               Text(
-                s.language,
+                s.language.toUpperCase(),
                 textAlign: TextAlign.center,
                 style: GoogleFonts.raleway(
-                  color: mutedColor,
+                  color: AppColors.lightTextMuted,
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 3,
                 ),
               ),
               const SizedBox(height: 16),
+
+              // ── Language options ────────────────────────────────────────
               Row(
                 children: [
                   Expanded(
@@ -128,10 +137,28 @@ class _LanguageSelectionPageState
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
+
+              // ── Continue button ─────────────────────────────────────────
               FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.maroon,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
                 onPressed: _confirm,
-                child: Text(s.continueBtn),
+                child: Text(
+                  s.continueBtn.toUpperCase(),
+                  style: GoogleFonts.raleway(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 11,
+                    letterSpacing: 2.5,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               const SizedBox(height: 48),
             ],
@@ -164,14 +191,6 @@ class _LanguageOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = locale == selected;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final borderColor = isSelected
-        ? AppColors.gold
-        : (isDark ? AppColors.divider : AppColors.lightDivider);
-    final textColor = isSelected
-        ? AppColors.gold
-        : (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary);
 
     return GestureDetector(
       onTap: () => onTap(locale),
@@ -179,14 +198,19 @@ class _LanguageOption extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          border: Border.all(color: borderColor, width: isSelected ? 1.5 : 1),
+          border: Border.all(
+            color: isSelected ? AppColors.maroon : AppColors.lightDivider,
+            width: isSelected ? 1.5 : 1,
+          ),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
           label,
           textAlign: TextAlign.center,
           style: GoogleFonts.cormorantGaramond(
-            color: textColor,
+            color: isSelected
+                ? AppColors.maroon
+                : AppColors.lightTextSecondary,
             fontSize: 18,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             letterSpacing: 1,

@@ -87,10 +87,22 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
     final s = S.of(context);
 
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
-        title: Text(s.newPractice),
+        backgroundColor: AppColors.maroon,
+        foregroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        title: Text(
+          s.newPractice,
+          style: GoogleFonts.cormorantGaramond(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.close, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -172,8 +184,20 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
             _MalaSizeField(controller: _malaCtrl),
             const SizedBox(height: 40),
             FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.maroon,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
               onPressed: _saving ? null : _submit,
-              child: Text(_saving ? s.saving : s.addPractice),
+              child: Text(
+                _saving ? s.saving : s.addPractice,
+                style: GoogleFonts.raleway(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 2,
+                  fontSize: 11,
+                ),
+              ),
             ),
           ],
         ),
