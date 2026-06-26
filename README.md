@@ -1,6 +1,6 @@
 # Drub — Tibetan Buddhist Practice Tracker
 
-**སྒྲུབ** (*drub*) is a mobile app for tracking the accumulation of Tibetan Buddhist practices — mantras, prostrations, mandala offerings, and other ngöndro or long-term commitments.
+**སྒྲུབ།** (*drub*) is a mobile app for tracking the accumulation of Tibetan Buddhist practices — mantras, prostrations, mandala offerings, and other ngöndro or long-term commitments.
 
 ## Overview
 

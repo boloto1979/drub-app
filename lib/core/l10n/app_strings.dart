@@ -18,7 +18,7 @@ class S {
   bool get _isPt => locale.languageCode == 'pt';
 
   // --- App ---
-  String get appTitle => 'སྒྲུབ';
+  String get appTitle => 'སྒྲུབ།';
 
   // --- Nav ---
   String get navPractice => _isPt ? 'Prática' : 'Practice';

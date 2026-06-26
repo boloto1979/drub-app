@@ -36,7 +36,7 @@ class _LanguageSelectionPageState
 
               // ── Tibetan script ──────────────────────────────────────────
               Text(
-                'སྒྲུབ',
+                'སྒྲུབ།',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.goldDim,
@@ -92,7 +92,7 @@ class _LanguageSelectionPageState
               Text(
                 s.practiceAccumulation,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   color: AppColors.goldDim,
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
@@ -106,7 +106,7 @@ class _LanguageSelectionPageState
               Text(
                 s.language.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   color: AppColors.lightTextMuted,
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
@@ -152,7 +152,7 @@ class _LanguageSelectionPageState
                 onPressed: _confirm,
                 child: Text(
                   s.continueBtn.toUpperCase(),
-                  style: GoogleFonts.raleway(
+                  style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w700,
                     fontSize: 11,
                     letterSpacing: 2.5,

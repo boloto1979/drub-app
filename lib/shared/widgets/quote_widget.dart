@@ -57,7 +57,7 @@ class _QuoteWidgetState extends State<QuoteWidget> {
               const SizedBox(width: 8),
               Text(
                 quote.author,
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   color: AppColors.goldLight.withValues(alpha: 0.65),
                   fontSize: 9,
                   fontWeight: FontWeight.w500,

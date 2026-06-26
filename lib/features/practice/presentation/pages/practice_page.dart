@@ -220,7 +220,7 @@ class _DialOption extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.raleway(
+              style: GoogleFonts.poppins(
                 color: AppColors.lightTextPrimary,
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
@@ -271,7 +271,7 @@ class _HeaderTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          'སྒྲུབ',
+          'སྒྲུབ།',
           style: GoogleFonts.cormorantGaramond(
             color: Colors.white,
             fontSize: 44,
@@ -285,7 +285,7 @@ class _HeaderTitle extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 6),
           child: Text(
             S.of(context).accumulations,
-            style: GoogleFonts.raleway(
+            style: GoogleFonts.poppins(
               color: Colors.white.withValues(alpha: 0.35),
               fontSize: 9,
               fontWeight: FontWeight.w600,
@@ -337,7 +337,7 @@ class _EmptyState extends StatelessWidget {
             onPressed: onAdd,
             child: Text(
               s.addPractice,
-              style: GoogleFonts.raleway(
+              style: GoogleFonts.poppins(
                 color: AppColors.goldDim,
                 fontSize: 11,
                 fontWeight: FontWeight.w600,

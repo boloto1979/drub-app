@@ -192,7 +192,7 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
               onPressed: _saving ? null : _submit,
               child: Text(
                 _saving ? s.saving : s.addPractice,
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w700,
                   letterSpacing: 2,
                   fontSize: 11,
@@ -207,7 +207,7 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
 
   Widget _label(String text) => Text(
         text,
-        style: GoogleFonts.raleway(
+        style: GoogleFonts.poppins(
           color: AppColors.goldDim,
           fontSize: 10,
           fontWeight: FontWeight.w600,
@@ -301,7 +301,7 @@ class _ImagePicker extends StatelessWidget {
                       color: AppColors.lightTextMuted, size: 32),
                   const SizedBox(height: 8),
                   Text(label,
-                      style: GoogleFonts.raleway(
+                      style: GoogleFonts.poppins(
                           color: AppColors.lightTextMuted,
                           fontSize: 10,
                           letterSpacing: 2)),
@@ -355,7 +355,7 @@ class _MalaSizeField extends StatelessWidget {
               onTap: () => controller.text = size.toString(),
               child: Text(
                 '$size',
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   color: AppColors.goldDim,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

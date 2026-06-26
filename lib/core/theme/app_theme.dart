@@ -80,13 +80,13 @@ abstract class AppTheme {
           color: AppColors.textSecondary,
           height: 1.6,
         ),
-        labelLarge: GoogleFonts.raleway(
+        labelLarge: GoogleFonts.poppins(
           color: AppColors.gold,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.5,
           fontSize: 12,
         ),
-        labelMedium: GoogleFonts.raleway(
+        labelMedium: GoogleFonts.poppins(
           color: AppColors.textSecondary,
           letterSpacing: 1.2,
           fontSize: 11,
@@ -117,14 +117,14 @@ abstract class AppTheme {
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return GoogleFonts.raleway(
+            return GoogleFonts.poppins(
               color: AppColors.gold,
               fontSize: 10,
               fontWeight: FontWeight.w600,
               letterSpacing: 1.2,
             );
           }
-          return GoogleFonts.raleway(
+          return GoogleFonts.poppins(
             color: AppColors.textMuted,
             fontSize: 10,
             letterSpacing: 1.0,
@@ -150,7 +150,7 @@ abstract class AppTheme {
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.goldDim,
           foregroundColor: AppColors.textPrimary,
-          textStyle: GoogleFonts.raleway(
+          textStyle: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
             letterSpacing: 1.5,
             fontSize: 12,
@@ -201,13 +201,13 @@ abstract class AppTheme {
           color: AppColors.lightTextSecondary,
           height: 1.6,
         ),
-        labelLarge: GoogleFonts.raleway(
+        labelLarge: GoogleFonts.poppins(
           color: AppColors.goldDim,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.5,
           fontSize: 12,
         ),
-        labelMedium: GoogleFonts.raleway(
+        labelMedium: GoogleFonts.poppins(
           color: AppColors.lightTextSecondary,
           letterSpacing: 1.2,
           fontSize: 11,
@@ -238,14 +238,14 @@ abstract class AppTheme {
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return GoogleFonts.raleway(
+            return GoogleFonts.poppins(
               color: AppColors.goldDim,
               fontSize: 10,
               fontWeight: FontWeight.w600,
               letterSpacing: 1.2,
             );
           }
-          return GoogleFonts.raleway(
+          return GoogleFonts.poppins(
             color: AppColors.lightTextMuted,
             fontSize: 10,
             letterSpacing: 1.0,
@@ -271,7 +271,7 @@ abstract class AppTheme {
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.goldDim,
           foregroundColor: AppColors.lightBackground,
-          textStyle: GoogleFonts.raleway(
+          textStyle: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
             letterSpacing: 1.5,
             fontSize: 12,

@@ -55,7 +55,7 @@ class _SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
       child: Text(
         text.toUpperCase(),
-        style: GoogleFonts.raleway(
+        style: GoogleFonts.poppins(
           color: AppColors.lightTextMuted,
           fontSize: 9,
           fontWeight: FontWeight.w600,
@@ -84,7 +84,7 @@ class _SettingsTile extends StatelessWidget {
       leading: Icon(icon, color: AppColors.maroon, size: 20),
       title: Text(
         label,
-        style: GoogleFonts.raleway(
+        style: GoogleFonts.poppins(
           fontSize: 12,
           fontWeight: FontWeight.w500,
           letterSpacing: 1,

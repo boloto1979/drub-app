@@ -210,7 +210,7 @@ class _EditPracticePageState extends State<EditPracticePage> {
               onPressed: _saving ? null : _submit,
               child: Text(
                 _saving ? s.saving : s.save,
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w700,
                   letterSpacing: 2,
                   fontSize: 11,
@@ -230,7 +230,7 @@ class _EditPracticePageState extends State<EditPracticePage> {
               icon: const Icon(Icons.delete_outline, size: 16),
               label: Text(
                 s.delete,
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 2,
@@ -245,7 +245,7 @@ class _EditPracticePageState extends State<EditPracticePage> {
 
   Widget _label(String text) => Text(
         text,
-        style: GoogleFonts.raleway(
+        style: GoogleFonts.poppins(
           color: AppColors.goldDim,
           fontSize: 10,
           fontWeight: FontWeight.w600,
@@ -312,7 +312,7 @@ class _EditPracticePageState extends State<EditPracticePage> {
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               s.cancel,
-              style: GoogleFonts.raleway(
+              style: GoogleFonts.poppins(
                 color: AppColors.lightTextSecondary,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.5,
@@ -331,7 +331,7 @@ class _EditPracticePageState extends State<EditPracticePage> {
             },
             child: Text(
               s.confirm,
-              style: GoogleFonts.raleway(
+              style: GoogleFonts.poppins(
                 color: AppColors.maroon,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.5,
@@ -382,7 +382,7 @@ class _ImagePicker extends StatelessWidget {
                       color: AppColors.lightTextMuted, size: 32),
                   const SizedBox(height: 8),
                   Text(label,
-                      style: GoogleFonts.raleway(
+                      style: GoogleFonts.poppins(
                           color: AppColors.lightTextMuted,
                           fontSize: 10,
                           letterSpacing: 2)),
@@ -436,7 +436,7 @@ class _MalaSizeField extends StatelessWidget {
               onTap: () => controller.text = size.toString(),
               child: Text(
                 '$size',
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   color: AppColors.goldDim,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

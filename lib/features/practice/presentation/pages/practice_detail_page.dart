@@ -33,7 +33,6 @@ class PracticeDetailPage extends StatelessWidget {
 
   Widget _buildScaffold(BuildContext context, PracticeGoal goal) {
     final s = S.of(context);
-    final text = Theme.of(context).textTheme;
     final fmt = DateFormat('dd/MM/yyyy');
     final numFmt = NumberFormat.decimalPattern();
     final hasImage = goal.imagePath != null;
@@ -61,7 +60,7 @@ class PracticeDetailPage extends StatelessWidget {
                     onPressed: () => _showAccumulateSheet(context, goal),
                     child: Text(
                       s.accumulate,
-                      style: GoogleFonts.raleway(
+                      style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w700,
                         letterSpacing: 2,
                         fontSize: 11,
@@ -91,7 +90,7 @@ class PracticeDetailPage extends StatelessWidget {
                   ),
                   child: Text(
                     s.edit,
-                    style: GoogleFonts.raleway(
+                    style: GoogleFonts.poppins(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 2,
@@ -161,13 +160,11 @@ class PracticeDetailPage extends StatelessWidget {
                 _CountRow(
                   label: s.requiredReps,
                   value: numFmt.format(goal.targetCount),
-                  text: text,
                 ),
                 const SizedBox(height: 4),
                 _CountRow(
                   label: s.completedReps,
                   value: numFmt.format(goal.currentCount),
-                  text: text,
                   highlight: true,
                 ),
                 const SizedBox(height: 16),
@@ -235,13 +232,11 @@ class PracticeDetailPage extends StatelessWidget {
 class _CountRow extends StatelessWidget {
   final String label;
   final String value;
-  final TextTheme text;
   final bool highlight;
 
   const _CountRow({
     required this.label,
     required this.value,
-    required this.text,
     this.highlight = false,
   });
 
@@ -252,7 +247,7 @@ class _CountRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: GoogleFonts.raleway(
+          style: GoogleFonts.poppins(
             color: AppColors.lightTextMuted,
             fontSize: 11,
             letterSpacing: 1.5,
@@ -260,10 +255,10 @@ class _CountRow extends StatelessWidget {
         ),
         Text(
           value,
-          style: text.headlineMedium?.copyWith(
-            color:
-                highlight ? AppColors.lightTextPrimary : AppColors.lightTextMuted,
+          style: GoogleFonts.poppins(
+            color: highlight ? AppColors.lightTextPrimary : AppColors.lightTextMuted,
             fontWeight: highlight ? FontWeight.w500 : FontWeight.w300,
+            fontSize: 28,
           ),
         ),
       ],
@@ -286,7 +281,7 @@ class _StatRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.raleway(
+            style: GoogleFonts.poppins(
               color: AppColors.lightTextSecondary,
               fontSize: 12,
               letterSpacing: 1,
@@ -294,7 +289,7 @@ class _StatRow extends StatelessWidget {
           ),
           Text(
             value,
-            style: GoogleFonts.raleway(
+            style: GoogleFonts.poppins(
               color: AppColors.lightTextPrimary,
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -370,7 +365,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
               // Practice label
               Text(
                 widget.goal.practiceName.toUpperCase(),
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   color: AppColors.lightTextMuted,
                   fontSize: 9,
                   letterSpacing: 2.5,
@@ -385,7 +380,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                 keyboardType: TextInputType.number,
                 autofocus: true,
                 textAlign: TextAlign.left,
-                style: GoogleFonts.cormorantGaramond(
+                style: GoogleFonts.poppins(
                   fontSize: 56,
                   fontWeight: FontWeight.w300,
                   color: AppColors.lightTextPrimary,
@@ -393,7 +388,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                 ),
                 decoration: InputDecoration(
                   hintText: '0',
-                  hintStyle: GoogleFonts.cormorantGaramond(
+                  hintStyle: GoogleFonts.poppins(
                     fontSize: 56,
                     fontWeight: FontWeight.w300,
                     color: AppColors.lightTextMuted.withValues(alpha: 0.4),
@@ -429,7 +424,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                       ),
                       child: Text(
                         s.cancel,
-                        style: GoogleFonts.raleway(
+                        style: GoogleFonts.poppins(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 1.5,
@@ -454,7 +449,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                       ),
                       child: Text(
                         'OK',
-                        style: GoogleFonts.raleway(
+                        style: GoogleFonts.poppins(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 2,
@@ -551,7 +546,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                     children: [
                       Text(
                         numFmt.format(_count),
-                        style: GoogleFonts.cormorantGaramond(
+                        style: GoogleFonts.poppins(
                           fontSize: 68,
                           fontWeight: FontWeight.w300,
                           color: AppColors.lightTextPrimary,
@@ -572,7 +567,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                   const SizedBox(height: 2),
                   Text(
                     s.accumulated.toUpperCase(),
-                    style: GoogleFonts.raleway(
+                    style: GoogleFonts.poppins(
                       color: AppColors.lightTextMuted,
                       fontSize: 9,
                       letterSpacing: 2,
@@ -593,7 +588,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                   Text(
                     '${numFmt.format(widget.goal.currentCount)} / ${numFmt.format(widget.goal.targetCount)}',
                     textAlign: TextAlign.end,
-                    style: GoogleFonts.raleway(
+                    style: GoogleFonts.poppins(
                       color: AppColors.lightTextMuted,
                       fontSize: 9,
                       letterSpacing: 1,
@@ -643,7 +638,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                       const SizedBox(height: 18),
                       Text(
                         s.addMala.toUpperCase(),
-                        style: GoogleFonts.raleway(
+                        style: GoogleFonts.poppins(
                           color: Colors.white.withValues(alpha: 0.80),
                           fontSize: 10,
                           letterSpacing: 2.5,
@@ -653,7 +648,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                       const SizedBox(height: 4),
                       Text(
                         '· ${widget.goal.malaSize} ·',
-                        style: GoogleFonts.raleway(
+                        style: GoogleFonts.poppins(
                           color: Colors.white.withValues(alpha: 0.35),
                           fontSize: 9,
                           letterSpacing: 2,

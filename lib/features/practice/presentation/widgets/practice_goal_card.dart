@@ -131,7 +131,7 @@ class _ImageHeader extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   'Mala · ${goal.malaSize}',
-                  style: GoogleFonts.raleway(
+                  style: GoogleFonts.poppins(
                     color: Colors.white.withValues(alpha: 0.55),
                     fontSize: 9,
                     letterSpacing: 1.5,
@@ -168,7 +168,7 @@ class _ProgressSection extends StatelessWidget {
             children: [
               Text(
                 fmt.format(goal.currentCount),
-                style: GoogleFonts.cormorantGaramond(
+                style: GoogleFonts.poppins(
                   color: AppColors.lightTextPrimary,
                   fontSize: 26,
                   fontWeight: FontWeight.w500,
@@ -178,7 +178,7 @@ class _ProgressSection extends StatelessWidget {
               const Spacer(),
               Text(
                 '$pct%',
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   color: AppColors.maroon.withValues(alpha: 0.6),
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -188,7 +188,7 @@ class _ProgressSection extends StatelessWidget {
               const SizedBox(width: 10),
               Text(
                 fmt.format(goal.targetCount),
-                style: GoogleFonts.raleway(
+                style: GoogleFonts.poppins(
                   color: AppColors.lightTextMuted,
                   fontSize: 11,
                   letterSpacing: 0.5,
@@ -229,7 +229,7 @@ class _MetaRow extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             fmt.format(goal.currentCount),
-            style: GoogleFonts.raleway(
+            style: GoogleFonts.poppins(
               color: AppColors.lightTextSecondary,
               fontSize: 11,
               fontWeight: FontWeight.w500,
@@ -241,7 +241,7 @@ class _MetaRow extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               fmt.format(goal.remaining),
-              style: GoogleFonts.raleway(
+              style: GoogleFonts.poppins(
                 color: AppColors.lightTextSecondary,
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
@@ -262,7 +262,7 @@ class _Label extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: GoogleFonts.raleway(
+      style: GoogleFonts.poppins(
         color: AppColors.lightTextMuted,
         fontSize: 9,
         fontWeight: FontWeight.w600,
