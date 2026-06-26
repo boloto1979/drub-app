@@ -27,11 +27,18 @@ class _LanguageSelectionPageState
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.sizeOf(context).height -
+                  MediaQuery.paddingOf(context).top -
+                  MediaQuery.paddingOf(context).bottom,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
               const Spacer(flex: 3),
 
               // ── Tibetan script ──────────────────────────────────────────
@@ -162,6 +169,8 @@ class _LanguageSelectionPageState
               ),
               const SizedBox(height: 48),
             ],
+          ),
+        ),
           ),
         ),
       ),

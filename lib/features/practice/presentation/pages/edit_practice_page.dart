@@ -169,7 +169,7 @@ class _EditPracticePageState extends State<EditPracticePage> {
             GestureDetector(
               onTap: _pickDate,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: const BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: AppColors.lightDivider),
@@ -430,10 +430,10 @@ class _MalaSizeField extends StatelessWidget {
           ),
         ),
         for (final size in [108, 111, 116])
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: GestureDetector(
-              onTap: () => controller.text = size.toString(),
+          GestureDetector(
+            onTap: () => controller.text = size.toString(),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 4, 16),
               child: Text(
                 '$size',
                 style: GoogleFonts.poppins(

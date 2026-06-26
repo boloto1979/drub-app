@@ -55,7 +55,7 @@ class PracticeDetailPage extends StatelessWidget {
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.maroon,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     onPressed: () => _showAccumulateSheet(context, goal),
                     child: Text(
@@ -85,7 +85,7 @@ class PracticeDetailPage extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
-                      vertical: 14,
+                      vertical: 16,
                     ),
                   ),
                   child: Text(
@@ -506,7 +506,9 @@ class _AccumulatePageState extends State<_AccumulatePage> {
           children: [
             // Full-bleed image
             SizedBox(
-              height: 168,
+              height: MediaQuery.orientationOf(context) == Orientation.landscape
+                  ? 80
+                  : 168,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -556,10 +558,13 @@ class _AccumulatePageState extends State<_AccumulatePage> {
                       const Spacer(),
                       GestureDetector(
                         onTap: _editManually,
-                        child: const Icon(
-                          Icons.more_horiz,
-                          color: AppColors.goldDim,
-                          size: 24,
+                        child: const Padding(
+                          padding: EdgeInsets.all(12),
+                          child: Icon(
+                            Icons.more_horiz,
+                            color: AppColors.goldDim,
+                            size: 24,
+                          ),
                         ),
                       ),
                     ],

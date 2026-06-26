@@ -80,6 +80,19 @@ class S {
   String get schedule => _isPt ? 'AGENDA' : 'SCHEDULE';
   String get edit => _isPt ? 'EDITAR' : 'EDIT';
   String get addMala => _isPt ? 'ADICIONAR MALA' : 'ADD MALA';
+
+  // --- Backup ---
+  String get dataBackup => _isPt ? 'Dados' : 'Data';
+  String get exportData => _isPt ? 'Exportar acumulações' : 'Export accumulations';
+  String get importData => _isPt ? 'Importar acumulações' : 'Import accumulations';
+  String get importConfirmTitle => _isPt ? 'Importar dados?' : 'Import data?';
+  String get importConfirmMessage => _isPt
+      ? 'Práticas ainda não existentes no app serão adicionadas. Práticas já existentes não serão alteradas.'
+      : 'Practices not yet in the app will be added. Existing practices will not be changed.';
+  String get importBtn => _isPt ? 'IMPORTAR' : 'IMPORT';
+  String get importSuccess => _isPt ? 'Dados importados com sucesso.' : 'Data imported successfully.';
+  String get importError => _isPt ? 'Erro ao importar o arquivo.' : 'Failed to import the file.';
+  String get importVersionError => _isPt ? 'Versão do arquivo não suportada.' : 'Unsupported backup version.';
 }
 
 final sProvider = Provider<S>((ref) {

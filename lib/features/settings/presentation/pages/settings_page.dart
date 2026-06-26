@@ -4,13 +4,22 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../shared/providers/isar_provider.dart';
 import '../../../../shared/providers/locale_provider.dart';
+import '../../data/backup_service.dart';
 
-class SettingsPage extends ConsumerWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends ConsumerState<SettingsPage> {
+  bool _busy = false;
+
+  @override
+  Widget build(BuildContext context) {
     final s = S.of(context);
 
     return Scaffold(
@@ -30,16 +39,145 @@ class SettingsPage extends ConsumerWidget {
           ),
         ),
       ),
-      body: ListView(
+      body: Stack(
         children: [
-          _SectionLabel(s.language),
-          _SettingsTile(
-            icon: Icons.language_outlined,
-            label: s.chooseLanguage,
-            onTap: () =>
-                ref.read(onboardingNotifierProvider.notifier).reset(),
+          ListView(
+            children: [
+              _SectionLabel(s.language),
+              _SettingsTile(
+                icon: Icons.language_outlined,
+                label: s.chooseLanguage,
+                onTap: () =>
+                    ref.read(onboardingNotifierProvider.notifier).reset(),
+              ),
+              _SectionLabel(s.dataBackup),
+              _SettingsTile(
+                icon: Icons.upload_outlined,
+                label: s.exportData,
+                onTap: _busy ? null : _export,
+              ),
+              _SettingsTile(
+                icon: Icons.download_outlined,
+                label: s.importData,
+                onTap: _busy ? null : _import,
+              ),
+            ],
+          ),
+          if (_busy)
+            const ColoredBox(
+              color: Color(0x33000000),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _export() async {
+    setState(() => _busy = true);
+    try {
+      final isar = await ref.read(isarProvider.future);
+      await BackupService(isar).exportBackup();
+    } catch (_) {
+      if (mounted) {
+        _showSnack(S.of(context).importError);
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _import() async {
+    final s = S.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.lightBackground,
+        title: Text(
+          s.importConfirmTitle,
+          style: GoogleFonts.cormorantGaramond(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: AppColors.lightTextPrimary,
+          ),
+        ),
+        content: Text(
+          s.importConfirmMessage,
+          style: GoogleFonts.poppins(
+            fontSize: 12,
+            color: AppColors.lightTextSecondary,
+            height: 1.6,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(
+              s.cancel,
+              style: GoogleFonts.poppins(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.5,
+                color: AppColors.lightTextMuted,
+              ),
+            ),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.maroon,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              s.importBtn,
+              style: GoogleFonts.poppins(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.5,
+              ),
+            ),
           ),
         ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() => _busy = true);
+    try {
+      final isar = await ref.read(isarProvider.future);
+      final result = await BackupService(isar).importBackup();
+
+      if (!mounted) return;
+      switch (result) {
+        case ImportResult.success:
+          _showSnack(S.of(context).importSuccess);
+        case ImportResult.cancelled:
+          break;
+        case ImportResult.versionMismatch:
+          _showSnack(S.of(context).importVersionError);
+        case ImportResult.error:
+          _showSnack(S.of(context).importError);
+      }
+    } catch (_) {
+      if (mounted) _showSnack(S.of(context).importError);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  void _showSnack(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: GoogleFonts.poppins(fontSize: 12),
+        ),
+        backgroundColor: AppColors.maroon,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
     );
   }
@@ -69,7 +207,7 @@ class _SectionLabel extends StatelessWidget {
 class _SettingsTile extends StatelessWidget {
   final IconData icon;
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const _SettingsTile({
     required this.icon,
