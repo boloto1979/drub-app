@@ -54,4 +54,29 @@ class PracticeRepository {
       );
     });
   }
+
+  Future<void> setAccumulation(PracticeGoal goal, int newTotal) async {
+    await _isar.writeTxn(() async {
+      final diff = newTotal - goal.currentCount;
+      goal.currentCount = newTotal;
+      goal.lastAccumulatedAt = DateTime.now();
+
+      if (newTotal >= goal.targetCount) {
+        goal.completedAt = DateTime.now();
+      } else {
+        goal.completedAt = null;
+      }
+
+      await _isar.practiceGoals.put(goal);
+
+      if (diff != 0) {
+        await _isar.practiceEntrys.put(
+          PracticeEntry()
+            ..practiceName = goal.practiceName
+            ..count = diff
+            ..date = DateTime.now(),
+        );
+      }
+    });
+  }
 }

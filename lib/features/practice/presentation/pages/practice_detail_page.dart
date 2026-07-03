@@ -328,7 +328,7 @@ class _AccumulatePageState extends State<_AccumulatePage> {
   Future<void> _editManually() async {
     final s = S.of(context);
     final ctrl = TextEditingController(
-      text: _count > 0 ? _count.toString() : '',
+      text: widget.goal.currentCount.toString(),
     );
 
     final result = await showModalBottomSheet<int>(
@@ -468,13 +468,17 @@ class _AccumulatePageState extends State<_AccumulatePage> {
 
     ctrl.dispose();
     if (result == null || !mounted) return;
-    final diff = result - _count;
-    if (diff > 0) {
+    final diff = result - widget.goal.currentCount;
+    if (diff != 0) {
       setState(() => _saving = true);
-      await widget.repository.addAccumulation(widget.goal, diff);
-      if (mounted) setState(() => _saving = false);
+      await widget.repository.setAccumulation(widget.goal, result);
+      if (mounted) {
+        setState(() {
+          _count = (_count + diff).clamp(0, result);
+          _saving = false;
+        });
+      }
     }
-    if (mounted) setState(() => _count = result);
   }
 
   @override
