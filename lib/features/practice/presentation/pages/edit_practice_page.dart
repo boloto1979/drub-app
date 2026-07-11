@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,9 +10,11 @@ import 'package:path/path.dart' as p;
 import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../data/models/practice_goal.dart';
+import '../../data/models/practice_group.dart';
 import '../../data/repositories/practice_repository.dart';
+import '../../providers/practice_providers.dart';
 
-class EditPracticePage extends StatefulWidget {
+class EditPracticePage extends ConsumerStatefulWidget {
   final PracticeGoal goal;
   final PracticeRepository repository;
 
@@ -22,10 +25,10 @@ class EditPracticePage extends StatefulWidget {
   });
 
   @override
-  State<EditPracticePage> createState() => _EditPracticePageState();
+  ConsumerState<EditPracticePage> createState() => _EditPracticePageState();
 }
 
-class _EditPracticePageState extends State<EditPracticePage> {
+class _EditPracticePageState extends ConsumerState<EditPracticePage> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameCtrl;
   late final TextEditingController _targetCtrl;
@@ -33,6 +36,7 @@ class _EditPracticePageState extends State<EditPracticePage> {
   late final TextEditingController _malaCtrl;
 
   String? _imagePath;
+  int? _groupId;
   bool _saving = false;
   DateTime? _completionDate;
   bool _updatingInternally = false;
@@ -84,6 +88,7 @@ class _EditPracticePageState extends State<EditPracticePage> {
     _malaCtrl =
         TextEditingController(text: widget.goal.malaSize.toString());
     _imagePath = widget.goal.imagePath;
+    _groupId = widget.goal.groupId;
     _completionDate = widget.goal.estimatedCompletionDate;
     _dailyCtrl.addListener(_onFieldsChanged);
     _targetCtrl.addListener(_onFieldsChanged);
@@ -100,9 +105,64 @@ class _EditPracticePageState extends State<EditPracticePage> {
     super.dispose();
   }
 
+  String _groupLabel(List<PracticeGroup> groups, S s) {
+    if (_groupId == null) return s.noGroup;
+    for (final g in groups) {
+      if (g.id == _groupId) return g.name;
+    }
+    return s.noGroup;
+  }
+
+  Future<void> _pickGroup(BuildContext context, List<PracticeGroup> groups) async {
+    final s = S.of(context);
+    final result = await showModalBottomSheet<int?>(
+      context: context,
+      backgroundColor: AppColors.lightBackground,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              width: 32,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.lightDivider,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 8),
+            ListTile(
+              title: Text(s.noGroup, style: GoogleFonts.poppins(fontSize: 13)),
+              trailing: _groupId == null
+                  ? const Icon(Icons.check, color: AppColors.maroon, size: 18)
+                  : null,
+              onTap: () => Navigator.pop(ctx, -1),
+            ),
+            for (final g in groups)
+              ListTile(
+                title: Text(g.name, style: GoogleFonts.poppins(fontSize: 13)),
+                trailing: _groupId == g.id
+                    ? const Icon(Icons.check, color: AppColors.maroon, size: 18)
+                    : null,
+                onTap: () => Navigator.pop(ctx, g.id),
+              ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+    if (result == null) return;
+    setState(() => _groupId = result == -1 ? null : result);
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final groups = ref.watch(practiceGroupsProvider).valueOrNull ?? [];
 
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
@@ -200,6 +260,13 @@ class _EditPracticePageState extends State<EditPracticePage> {
             _label(s.malaSize),
             const SizedBox(height: 8),
             _MalaSizeField(controller: _malaCtrl),
+            const SizedBox(height: 20),
+            _label(s.group),
+            const SizedBox(height: 8),
+            _GroupPickerRow(
+              label: _groupLabel(groups, s),
+              onTap: () => _pickGroup(context, groups),
+            ),
             const SizedBox(height: 48),
             FilledButton(
               style: FilledButton.styleFrom(
@@ -291,7 +358,8 @@ class _EditPracticePageState extends State<EditPracticePage> {
       ..targetCount = int.parse(_targetCtrl.text.trim())
       ..malaSize = int.tryParse(_malaCtrl.text.trim()) ?? 108
       ..dailyGoal = int.tryParse(_dailyCtrl.text.trim())
-      ..imagePath = _imagePath;
+      ..imagePath = _imagePath
+      ..groupId = _groupId;
 
     await widget.repository.addGoal(widget.goal);
     if (mounted) Navigator.pop(context);
@@ -340,6 +408,34 @@ class _EditPracticePageState extends State<EditPracticePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _GroupPickerRow extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _GroupPickerRow({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.lightDivider)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(label, style: Theme.of(context).textTheme.bodyLarge),
+            ),
+            const Icon(Icons.expand_more, size: 16, color: AppColors.goldDim),
+          ],
+        ),
       ),
     );
   }

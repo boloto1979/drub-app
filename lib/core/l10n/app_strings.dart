@@ -81,6 +81,19 @@ class S {
   String get edit => _isPt ? 'EDITAR' : 'EDIT';
   String get addMala => _isPt ? 'ADICIONAR MALA' : 'ADD MALA';
 
+  // --- Groups ---
+  String get groups => _isPt ? 'Grupos' : 'Groups';
+  String get manageGroups => _isPt ? 'Gerenciar grupos' : 'Manage groups';
+  String get noGroup => _isPt ? 'Sem grupo' : 'No group';
+  String get newGroup => _isPt ? 'Novo grupo' : 'New group';
+  String get groupNameHint => _isPt ? 'ex: Ngöndro' : 'e.g. Ngöndro';
+  String get deleteGroupTitle => _isPt ? 'Excluir grupo?' : 'Delete group?';
+  String get deleteGroupMessage => _isPt
+      ? 'As práticas deste grupo ficarão sem grupo.'
+      : 'Practices in this group will become ungrouped.';
+  String get noGroups => _isPt ? 'Nenhum grupo criado.' : 'No groups yet.';
+  String get group => _isPt ? 'GRUPO' : 'GROUP';
+
   // --- Backup ---
   String get dataBackup => _isPt ? 'Dados' : 'Data';
   String get exportData => _isPt ? 'Exportar acumulações' : 'Export accumulations';

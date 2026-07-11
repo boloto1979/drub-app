@@ -10,6 +10,7 @@ import 'package:path/path.dart' as p;
 import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../data/models/practice_goal.dart';
+import '../../data/models/practice_group.dart';
 import '../../providers/practice_providers.dart';
 
 class AddPracticePage extends ConsumerStatefulWidget {
@@ -27,6 +28,7 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
   final _malaCtrl = TextEditingController(text: '108');
 
   String? _imagePath;
+  int? _groupId;
   bool _saving = false;
   DateTime? _completionDate;
   bool _updatingInternally = false;
@@ -82,9 +84,64 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
     super.dispose();
   }
 
+  String _groupLabel(List<PracticeGroup> groups, S s) {
+    if (_groupId == null) return s.noGroup;
+    for (final g in groups) {
+      if (g.id == _groupId) return g.name;
+    }
+    return s.noGroup;
+  }
+
+  Future<void> _pickGroup(BuildContext context, List<PracticeGroup> groups) async {
+    final s = S.of(context);
+    final result = await showModalBottomSheet<int?>(
+      context: context,
+      backgroundColor: AppColors.lightBackground,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              width: 32,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppColors.lightDivider,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 8),
+            ListTile(
+              title: Text(s.noGroup, style: GoogleFonts.poppins(fontSize: 13)),
+              trailing: _groupId == null
+                  ? const Icon(Icons.check, color: AppColors.maroon, size: 18)
+                  : null,
+              onTap: () => Navigator.pop(ctx, -1),
+            ),
+            for (final g in groups)
+              ListTile(
+                title: Text(g.name, style: GoogleFonts.poppins(fontSize: 13)),
+                trailing: _groupId == g.id
+                    ? const Icon(Icons.check, color: AppColors.maroon, size: 18)
+                    : null,
+                onTap: () => Navigator.pop(ctx, g.id),
+              ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+    if (result == null) return;
+    setState(() => _groupId = result == -1 ? null : result);
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+    final groups = ref.watch(practiceGroupsProvider).valueOrNull ?? [];
 
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
@@ -182,6 +239,13 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
             _label(s.malaSize),
             const SizedBox(height: 8),
             _MalaSizeField(controller: _malaCtrl),
+            const SizedBox(height: 20),
+            _label(s.group),
+            const SizedBox(height: 8),
+            _GroupPickerRow(
+              label: _groupLabel(groups, s),
+              onTap: () => _pickGroup(context, groups),
+            ),
             const SizedBox(height: 40),
             FilledButton(
               style: FilledButton.styleFrom(
@@ -255,6 +319,7 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
       ..malaSize = int.tryParse(_malaCtrl.text.trim()) ?? 108
       ..dailyGoal = int.tryParse(_dailyCtrl.text.trim())
       ..imagePath = _imagePath
+      ..groupId = _groupId
       ..startedAt = DateTime.now();
 
     final repo = await ref.read(practiceRepositoryProvider.future);
@@ -320,6 +385,34 @@ class _ImagePicker extends StatelessWidget {
     await Directory(p.dirname(dest)).create(recursive: true);
     await File(picked.path).copy(dest);
     onPicked(dest);
+  }
+}
+
+class _GroupPickerRow extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _GroupPickerRow({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.lightDivider)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(label, style: Theme.of(context).textTheme.bodyLarge),
+            ),
+            const Icon(Icons.expand_more, size: 16, color: AppColors.goldDim),
+          ],
+        ),
+      ),
+    );
   }
 }
 

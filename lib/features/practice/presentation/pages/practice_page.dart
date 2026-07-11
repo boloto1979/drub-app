@@ -8,6 +8,9 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/mantra_banner.dart';
 import '../../../../shared/widgets/quote_widget.dart';
+import '../../data/models/practice_goal.dart';
+import '../../data/models/practice_group.dart';
+import '../../data/repositories/practice_repository.dart';
 import '../../providers/practice_providers.dart';
 import '../widgets/practice_goal_card.dart';
 import 'add_practice_page.dart';
@@ -19,6 +22,7 @@ class PracticePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final goalsAsync = ref.watch(practiceGoalsProvider);
     final repoAsync = ref.watch(practiceRepositoryProvider);
+    final groups = ref.watch(practiceGroupsProvider).valueOrNull ?? [];
 
     return Scaffold(
       backgroundColor: AppColors.lightBackground,
@@ -32,18 +36,7 @@ class PracticePage extends ConsumerWidget {
                   child: _EmptyState(onAdd: () => _openAddPage(context)),
                 )
               else
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(20, 28, 20, 120),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (ctx, i) => PracticeGoalCard(
-                        goal: goals[i],
-                        repository: repo,
-                      ),
-                      childCount: goals.length,
-                    ),
-                  ),
-                ),
+                ..._buildGoalSlivers(context, goals, groups, repo),
             ],
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -59,10 +52,107 @@ class PracticePage extends ConsumerWidget {
     );
   }
 
+  List<Widget> _buildGoalSlivers(
+    BuildContext context,
+    List<PracticeGoal> goals,
+    List<PracticeGroup> groups,
+    PracticeRepository repo,
+  ) {
+    if (groups.isEmpty) {
+      return [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(20, 28, 20, 120),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (ctx, i) => PracticeGoalCard(goal: goals[i], repository: repo),
+              childCount: goals.length,
+            ),
+          ),
+        ),
+      ];
+    }
+
+    final s = S.of(context);
+    final slivers = <Widget>[];
+
+    for (final group in groups) {
+      final groupGoals = goals.where((g) => g.groupId == group.id).toList();
+      if (groupGoals.isEmpty) continue;
+      slivers.add(SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+          child: _GroupHeader(name: group.name),
+        ),
+      ));
+      slivers.add(SliverPadding(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (ctx, i) => PracticeGoalCard(goal: groupGoals[i], repository: repo),
+            childCount: groupGoals.length,
+          ),
+        ),
+      ));
+    }
+
+    final ungrouped = goals.where((g) => g.groupId == null).toList();
+    if (ungrouped.isNotEmpty) {
+      if (slivers.isNotEmpty) {
+        slivers.add(SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+            child: _GroupHeader(name: s.noGroup),
+          ),
+        ));
+      }
+      slivers.add(SliverPadding(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (ctx, i) => PracticeGoalCard(goal: ungrouped[i], repository: repo),
+            childCount: ungrouped.length,
+          ),
+        ),
+      ));
+    }
+
+    slivers.add(const SliverPadding(padding: EdgeInsets.only(bottom: 120)));
+    return slivers;
+  }
+
   void _openAddPage(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const AddPracticePage()),
+    );
+  }
+}
+
+// ─── Group header ─────────────────────────────────────────────────────────────
+
+class _GroupHeader extends StatelessWidget {
+  final String name;
+  const _GroupHeader({required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: Container(height: 1, color: AppColors.lightDivider)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            name.toUpperCase(),
+            style: GoogleFonts.poppins(
+              color: AppColors.goldDim,
+              fontSize: 9,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 2.5,
+            ),
+          ),
+        ),
+        Expanded(child: Container(height: 1, color: AppColors.lightDivider)),
+      ],
     );
   }
 }

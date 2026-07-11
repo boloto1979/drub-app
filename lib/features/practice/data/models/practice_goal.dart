@@ -25,6 +25,8 @@ class PracticeGoal {
 
   DateTime? completedAt;
 
+  int? groupId;
+
   int get remaining => (targetCount - currentCount).clamp(0, targetCount);
 
   double get progressPercent =>

@@ -6,6 +6,7 @@ import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/providers/isar_provider.dart';
 import '../../../../shared/providers/locale_provider.dart';
+import '../../../practice/presentation/pages/manage_groups_page.dart';
 import '../../data/backup_service.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -49,6 +50,17 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 label: s.chooseLanguage,
                 onTap: () =>
                     ref.read(onboardingNotifierProvider.notifier).reset(),
+              ),
+              _SectionLabel(s.groups),
+              _SettingsTile(
+                icon: Icons.folder_outlined,
+                label: s.manageGroups,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ManageGroupsPage(),
+                  ),
+                ),
               ),
               _SectionLabel(s.dataBackup),
               _SettingsTile(

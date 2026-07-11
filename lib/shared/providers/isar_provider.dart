@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../features/practice/data/models/practice_entry.dart';
 import '../../features/practice/data/models/practice_goal.dart';
+import '../../features/practice/data/models/practice_group.dart';
 import '../../features/library/data/models/library_item.dart';
 import '../../features/library/data/models/annotation.dart';
 import '../../features/calendar/data/models/sacred_date.dart';
@@ -19,6 +20,7 @@ Future<Isar> isar(Ref ref) async {
     [
       PracticeEntrySchema,
       PracticeGoalSchema,
+      PracticeGroupSchema,
       LibraryItemSchema,
       AnnotationSchema,
       SacredDateSchema,
