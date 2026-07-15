@@ -32,6 +32,7 @@ class _EditPracticePageState extends ConsumerState<EditPracticePage> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameCtrl;
   late final TextEditingController _targetCtrl;
+  late final TextEditingController _currentCtrl;
   late final TextEditingController _dailyCtrl;
   late final TextEditingController _malaCtrl;
 
@@ -43,7 +44,8 @@ class _EditPracticePageState extends ConsumerState<EditPracticePage> {
 
   int get _remaining {
     final target = int.tryParse(_targetCtrl.text) ?? widget.goal.targetCount;
-    return (target - widget.goal.currentCount).clamp(0, target);
+    final current = int.tryParse(_currentCtrl.text) ?? widget.goal.currentCount;
+    return (target - current).clamp(0, target);
   }
 
   void _onFieldsChanged() {
@@ -83,6 +85,8 @@ class _EditPracticePageState extends ConsumerState<EditPracticePage> {
     _nameCtrl = TextEditingController(text: widget.goal.practiceName);
     _targetCtrl =
         TextEditingController(text: widget.goal.targetCount.toString());
+    _currentCtrl =
+        TextEditingController(text: widget.goal.currentCount.toString());
     _dailyCtrl = TextEditingController(
         text: widget.goal.dailyGoal?.toString() ?? '');
     _malaCtrl =
@@ -92,14 +96,17 @@ class _EditPracticePageState extends ConsumerState<EditPracticePage> {
     _completionDate = widget.goal.estimatedCompletionDate;
     _dailyCtrl.addListener(_onFieldsChanged);
     _targetCtrl.addListener(_onFieldsChanged);
+    _currentCtrl.addListener(_onFieldsChanged);
   }
 
   @override
   void dispose() {
     _dailyCtrl.removeListener(_onFieldsChanged);
     _targetCtrl.removeListener(_onFieldsChanged);
+    _currentCtrl.removeListener(_onFieldsChanged);
     _nameCtrl.dispose();
     _targetCtrl.dispose();
+    _currentCtrl.dispose();
     _dailyCtrl.dispose();
     _malaCtrl.dispose();
     super.dispose();
@@ -213,6 +220,21 @@ class _EditPracticePageState extends ConsumerState<EditPracticePage> {
               validator: (v) {
                 final n = int.tryParse(v ?? '');
                 return (n == null || n <= 0) ? s.fieldInvalidNumber : null;
+              },
+            ),
+            const SizedBox(height: 20),
+            _label(s.currentCount),
+            const SizedBox(height: 8),
+            _field(
+              controller: _currentCtrl,
+              hint: '0',
+              keyboardType: TextInputType.number,
+              validator: (v) {
+                final n = int.tryParse(v ?? '');
+                if (n == null || n < 0) return s.fieldInvalidNumber;
+                final target = int.tryParse(_targetCtrl.text) ?? 0;
+                if (target > 0 && n > target) return s.fieldInvalidNumber;
+                return null;
               },
             ),
             const SizedBox(height: 20),
@@ -353,13 +375,26 @@ class _EditPracticePageState extends ConsumerState<EditPracticePage> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
 
+    final targetCount = int.parse(_targetCtrl.text.trim());
+    final currentCount = int.tryParse(_currentCtrl.text.trim()) ?? widget.goal.currentCount;
+
     widget.goal
       ..practiceName = _nameCtrl.text.trim()
-      ..targetCount = int.parse(_targetCtrl.text.trim())
+      ..targetCount = targetCount
+      ..currentCount = currentCount
       ..malaSize = int.tryParse(_malaCtrl.text.trim()) ?? 108
       ..dailyGoal = int.tryParse(_dailyCtrl.text.trim())
       ..imagePath = _imagePath
       ..groupId = _groupId;
+
+    if (currentCount > 0 && widget.goal.lastAccumulatedAt == null) {
+      widget.goal.lastAccumulatedAt = DateTime.now();
+    }
+    if (currentCount >= targetCount) {
+      widget.goal.completedAt ??= DateTime.now();
+    } else {
+      widget.goal.completedAt = null;
+    }
 
     await widget.repository.addGoal(widget.goal);
     if (mounted) Navigator.pop(context);

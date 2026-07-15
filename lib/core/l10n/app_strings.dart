@@ -17,32 +17,29 @@ class S {
 
   bool get _isPt => locale.languageCode == 'pt';
 
-  // --- App ---
   String get appTitle => 'སྒྲུབ།';
 
-  // --- Nav ---
   String get navPractice => _isPt ? 'Prática' : 'Practice';
   String get navLibrary => _isPt ? 'Biblioteca' : 'Library';
   String get navCalendar => _isPt ? 'Calendário' : 'Calendar';
   String get navSettings => _isPt ? 'Config.' : 'Settings';
 
-  // --- Language selection ---
   String get chooseLanguage => _isPt ? 'ESCOLHA O IDIOMA' : 'CHOOSE LANGUAGE';
   String get continueBtn => _isPt ? 'CONTINUAR' : 'CONTINUE';
   String get practiceAccumulation => _isPt ? 'ACUMULAÇÃO DE PRÁTICA' : 'PRACTICE ACCUMULATION';
   String get language => _isPt ? 'IDIOMA' : 'LANGUAGE';
 
-  // --- Practice list ---
   String get accumulations => _isPt ? 'ACUMULAÇÕES' : 'ACCUMULATIONS';
   String get noPractices => _isPt ? 'Nenhuma prática ainda.' : 'No practices yet.';
   String get addPractice => _isPt ? 'ADICIONAR PRÁTICA' : 'ADD PRACTICE';
 
-  // --- Add / Edit practice ---
   String get newPractice => _isPt ? 'Nova Prática' : 'New Practice';
   String get editPractice => _isPt ? 'Editar Prática' : 'Edit Practice';
   String get practiceName => _isPt ? 'NOME DA PRÁTICA' : 'PRACTICE NAME';
   String get targetCount => _isPt ? 'TOTAL A ACUMULAR' : 'TARGET ACCUMULATIONS';
   String get dailyGoal => _isPt ? 'META DIÁRIA (opcional)' : 'DAILY GOAL (optional)';
+  String get initialCount => _isPt ? 'JÁ ACUMULADO (opcional)' : 'ALREADY ACCUMULATED (optional)';
+  String get currentCount => _isPt ? 'ACUMULADO ATÉ AGORA' : 'ACCUMULATED SO FAR';
   String get malaSize => _isPt ? 'TAMANHO DO MALA' : 'MALA SIZE';
   String get addImage => _isPt ? 'ADICIONAR IMAGEM' : 'ADD IMAGE';
   String get save => _isPt ? 'SALVAR' : 'SAVE';
@@ -50,7 +47,6 @@ class S {
   String get fieldRequired => _isPt ? 'Obrigatório' : 'Required';
   String get fieldInvalidNumber => _isPt ? 'Número inválido' : 'Enter a valid number';
 
-  // --- Delete ---
   String get delete => _isPt ? 'EXCLUIR' : 'DELETE';
   String get deleteConfirmTitle => _isPt ? 'Excluir prática?' : 'Delete practice?';
   String get deleteConfirmMessage => _isPt
@@ -59,7 +55,6 @@ class S {
   String get cancel => _isPt ? 'CANCELAR' : 'CANCEL';
   String get confirm => _isPt ? 'EXCLUIR' : 'DELETE';
 
-  // --- Practice detail ---
   String get lastPractice => _isPt ? 'ÚLTIMA PRÁTICA' : 'LAST PRACTICE';
   String get daily => _isPt ? 'META DIÁRIA' : 'DAILY GOAL';
   String get estCompletion => _isPt ? 'PREVISÃO DE TÉRMINO' : 'EST. COMPLETION';
@@ -81,7 +76,16 @@ class S {
   String get edit => _isPt ? 'EDITAR' : 'EDIT';
   String get addMala => _isPt ? 'ADICIONAR MALA' : 'ADD MALA';
 
-  // --- Groups ---
+  String get dharmaQuote => _isPt
+      ? '"De forma alguma cometa a desvirtude; pratique a virtude inteiramente; dome totalmente a sua própria mente — este é o ensinamento do Buda."'
+      : '"Commit not a single unwholesome deed; cultivate a wealth of virtue; tame this mind of ours — this is the teaching of the Buddha."';
+
+  String get contribute => _isPt ? 'Contribuir' : 'Contribute';
+  String get contributeLabel => _isPt ? 'Apoiar o projeto' : 'Support the project';
+  String get contributeSubtitle => _isPt
+      ? 'Se este app te ajuda na prática, considere contribuir.'
+      : 'If this app helps your practice, consider contributing.';
+
   String get groups => _isPt ? 'Grupos' : 'Groups';
   String get manageGroups => _isPt ? 'Gerenciar grupos' : 'Manage groups';
   String get noGroup => _isPt ? 'Sem grupo' : 'No group';
@@ -94,7 +98,6 @@ class S {
   String get noGroups => _isPt ? 'Nenhum grupo criado.' : 'No groups yet.';
   String get group => _isPt ? 'GRUPO' : 'GROUP';
 
-  // --- Backup ---
   String get dataBackup => _isPt ? 'Dados' : 'Data';
   String get exportData => _isPt ? 'Exportar acumulações' : 'Export accumulations';
   String get importData => _isPt ? 'Importar acumulações' : 'Import accumulations';

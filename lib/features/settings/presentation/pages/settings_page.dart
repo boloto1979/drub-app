@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -8,6 +9,8 @@ import '../../../../shared/providers/isar_provider.dart';
 import '../../../../shared/providers/locale_provider.dart';
 import '../../../practice/presentation/pages/manage_groups_page.dart';
 import '../../data/backup_service.dart';
+
+const _stripeUrl = 'https://buy.stripe.com/PLACEHOLDER';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -40,6 +43,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
         ),
       ),
+      bottomNavigationBar: _ContributeCard(onTap: _openStripe),
       body: Stack(
         children: [
           ListView(
@@ -180,6 +184,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
+  Future<void> _openStripe() async {
+    final uri = Uri.parse(_stripeUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
   void _showSnack(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -190,6 +201,65 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         backgroundColor: AppColors.maroon,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      ),
+    );
+  }
+}
+
+class _ContributeCard extends StatelessWidget {
+  final VoidCallback onTap;
+  const _ContributeCard({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = S.of(context);
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            decoration: BoxDecoration(
+              color: AppColors.maroon,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.favorite_outline, color: Colors.white, size: 20),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        s.contributeLabel,
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        s.contributeSubtitle,
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 10,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.open_in_new, color: Colors.white, size: 16),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

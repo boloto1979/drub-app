@@ -24,6 +24,7 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _targetCtrl = TextEditingController();
+  final _initialCtrl = TextEditingController();
   final _dailyCtrl = TextEditingController();
   final _malaCtrl = TextEditingController(text: '108');
 
@@ -33,7 +34,11 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
   DateTime? _completionDate;
   bool _updatingInternally = false;
 
-  int get _remaining => int.tryParse(_targetCtrl.text) ?? 0;
+  int get _remaining {
+    final target = int.tryParse(_targetCtrl.text) ?? 0;
+    final initial = int.tryParse(_initialCtrl.text) ?? 0;
+    return (target - initial).clamp(0, target);
+  }
 
   void _onFieldsChanged() {
     if (_updatingInternally) return;
@@ -71,14 +76,17 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
     super.initState();
     _dailyCtrl.addListener(_onFieldsChanged);
     _targetCtrl.addListener(_onFieldsChanged);
+    _initialCtrl.addListener(_onFieldsChanged);
   }
 
   @override
   void dispose() {
     _dailyCtrl.removeListener(_onFieldsChanged);
     _targetCtrl.removeListener(_onFieldsChanged);
+    _initialCtrl.removeListener(_onFieldsChanged);
     _nameCtrl.dispose();
     _targetCtrl.dispose();
+    _initialCtrl.dispose();
     _dailyCtrl.dispose();
     _malaCtrl.dispose();
     super.dispose();
@@ -193,6 +201,14 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
                 final n = int.tryParse(v ?? '');
                 return (n == null || n <= 0) ? s.fieldInvalidNumber : null;
               },
+            ),
+            const SizedBox(height: 20),
+            _label(s.initialCount),
+            const SizedBox(height: 8),
+            _field(
+              controller: _initialCtrl,
+              hint: '0',
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 20),
             _label(s.dailyGoal),
@@ -312,15 +328,25 @@ class _AddPracticePageState extends ConsumerState<AddPracticePage> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
 
+    final targetCount = int.parse(_targetCtrl.text.trim());
+    final initialCount = int.tryParse(_initialCtrl.text.trim()) ?? 0;
+
     final goal = PracticeGoal()
       ..practiceName = _nameCtrl.text.trim()
-      ..targetCount = int.parse(_targetCtrl.text.trim())
-      ..currentCount = 0
+      ..targetCount = targetCount
+      ..currentCount = initialCount
       ..malaSize = int.tryParse(_malaCtrl.text.trim()) ?? 108
       ..dailyGoal = int.tryParse(_dailyCtrl.text.trim())
       ..imagePath = _imagePath
       ..groupId = _groupId
       ..startedAt = DateTime.now();
+
+    if (initialCount > 0) {
+      goal.lastAccumulatedAt = DateTime.now();
+    }
+    if (initialCount >= targetCount) {
+      goal.completedAt = DateTime.now();
+    }
 
     final repo = await ref.read(practiceRepositoryProvider.future);
     await repo.addGoal(goal);
